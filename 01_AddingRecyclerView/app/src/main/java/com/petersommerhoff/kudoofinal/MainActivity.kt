@@ -25,12 +25,22 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  private fun setUpRecyclerView() = with (recyclerViewTodos) {
+  //https://medium.com/@elye.project/mastering-kotlin-standard-functions-run-with-let-also-and-apply-9cd334b0ef84
+  /*private fun setUpRecyclerView() = with (recyclerViewTodos) {
     adapter = RecyclerListAdapter(sampleData())
     layoutManager = LinearLayoutManager(this@MainActivity)
     itemAnimator = DefaultItemAnimator()
     addItemDecoration(
         DividerItemDecoration(this@MainActivity, DividerItemDecoration.VERTICAL))
+  }*/
+
+  //https://kotlinlang.org/docs/reference/this-expressions.html
+  private fun setUpRecyclerView() = recyclerViewTodos.run {
+    adapter = RecyclerListAdapter(sampleData())
+    layoutManager = LinearLayoutManager(this@MainActivity)
+    itemAnimator = DefaultItemAnimator()
+    addItemDecoration(
+            DividerItemDecoration(this@MainActivity, DividerItemDecoration.VERTICAL))
   }
 
   private fun sampleData() = mutableListOf(

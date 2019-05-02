@@ -1,5 +1,6 @@
 package com.petersommerhoff.kudoofinal
 
+//import kotlinx.coroutines.experimental.android.UI
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
@@ -15,8 +16,9 @@ import com.petersommerhoff.kudoofinal.view.main.RecyclerListAdapter
 import com.petersommerhoff.kudoofinal.viewmodel.TodoViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,7 +49,7 @@ class MainActivity : AppCompatActivity() {
           DividerItemDecoration(this@MainActivity, DividerItemDecoration.VERTICAL))
     }
 
-    launch(UI) {
+    GlobalScope.launch(Dispatchers.Main) {
       val todosLiveData = viewModel.getTodos()
       todosLiveData.observe(this@MainActivity, Observer { todos ->
         // Observes changes in the LiveData
@@ -60,7 +62,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun onRecyclerItemClick(): (TodoItem) -> Unit = { todo ->
-    launch(DB) { viewModel.delete(todo) }
+    GlobalScope.launch(DB) { viewModel.delete(todo) }
   }
 }
 

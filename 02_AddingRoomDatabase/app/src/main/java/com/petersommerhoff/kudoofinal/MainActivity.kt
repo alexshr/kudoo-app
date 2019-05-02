@@ -11,8 +11,11 @@ import com.petersommerhoff.kudoofinal.db.DB
 import com.petersommerhoff.kudoofinal.view.main.RecyclerListAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,9 +35,9 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun setUpRecyclerView() = with(recyclerViewTodos) {
-    launch {
+    GlobalScope.launch {
       val todos = sampleData().toMutableList()
-      withContext(UI) { adapter = RecyclerListAdapter(todos) }
+      withContext(Dispatchers.Main) { adapter = RecyclerListAdapter(todos) }
     }
     layoutManager = LinearLayoutManager(this@MainActivity)
     itemAnimator = DefaultItemAnimator()

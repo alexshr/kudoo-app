@@ -1,18 +1,27 @@
+@file:Suppress("EXPERIMENTAL_API_USAGE")
+
 package com.petersommerhoff.kudoofinal.db
 
+//import android.arch.persistence.room.*
+//import kotlinx.coroutines.experimental.*
 import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.*
+import android.arch.persistence.room.Database
+import android.arch.persistence.room.Room
+import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.petersommerhoff.kudoofinal.model.TodoItem
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
 
 /**
  * @author Peter Sommerhoff
  */
 val DB = newSingleThreadContext("DB")  // CoroutineContext for DB operations
 
-@Database(entities = [TodoItem::class], version = 1)
+@Database(entities = [TodoItem::class], version = 1, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
+
 
   companion object {
     private var INSTANCE: AppDatabase? = null
@@ -37,7 +46,7 @@ abstract class AppDatabase : RoomDatabase() {
     }
 
     private fun populateWithSampleData(ctx: Context) {
-      launch(DB) {  // DB operations must be done on a background thread
+      GlobalScope.launch(DB) {  // DB operations must be done on a background thread
         with(getDatabase(ctx).todoItemDao()) {
           insertTodo(TodoItem("Create entity"))
           insertTodo(TodoItem("Add a DAO for data access"))

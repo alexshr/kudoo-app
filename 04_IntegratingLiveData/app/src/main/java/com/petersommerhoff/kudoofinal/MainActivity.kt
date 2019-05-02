@@ -14,8 +14,11 @@ import com.petersommerhoff.kudoofinal.view.main.RecyclerListAdapter
 import com.petersommerhoff.kudoofinal.viewmodel.TodoViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     viewModel = getViewModel(TodoViewModel::class)  // getViewModel is impl. next
     setUpRecyclerView()
 
-    launch(DB) {
+    GlobalScope.launch(DB) {
       repeat(3) {
         delay(1000)
         viewModel.add(TodoItem("Celebrate!"))
@@ -50,7 +53,7 @@ class MainActivity : AppCompatActivity() {
           DividerItemDecoration(this@MainActivity, DividerItemDecoration.VERTICAL))
     }
 
-    launch(UI) {
+    GlobalScope.launch(Dispatchers.Main) {
       val todosLiveData = viewModel.getTodos()
       todosLiveData.observe(this@MainActivity, Observer { todos ->
         // Observes changes in the LiveData
@@ -58,6 +61,7 @@ class MainActivity : AppCompatActivity() {
           val adapter = (recyclerViewTodos.adapter as RecyclerListAdapter)
           adapter.setItems(it)  // Updates list items when data changes (next step)
         }
+
       })
     }
   }

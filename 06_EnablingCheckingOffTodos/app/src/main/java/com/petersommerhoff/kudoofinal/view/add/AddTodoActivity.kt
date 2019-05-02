@@ -8,7 +8,8 @@ import com.petersommerhoff.kudoofinal.model.TodoItem
 import com.petersommerhoff.kudoofinal.view.common.getViewModel
 import com.petersommerhoff.kudoofinal.viewmodel.TodoViewModel
 import kotlinx.android.synthetic.main.activity_add_todo.*
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class AddTodoActivity : AppCompatActivity() {
 
@@ -25,7 +26,7 @@ class AddTodoActivity : AppCompatActivity() {
   private fun setUpListeners() {
     btnAddTodo.setOnClickListener {
       val newTodo = etNewTodo.text.toString()
-      launch(DB) { viewModel.add(TodoItem(newTodo)) }
+      GlobalScope.launch(DB) { viewModel.add(TodoItem(newTodo)) }
       finish()
     }
   }
